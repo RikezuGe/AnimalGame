@@ -21,13 +21,25 @@ public class PickCorretManager : MonoBehaviour
     void Start()
     {
         //animalsInList = 0;
-        PickAnimal();
+        //PickAnimal();
         Debug.Log("start");
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+
+            PickAnimal();
+            //foreach (GameObject gameObject in animalsToRow)
+            //{
+            //    Debug.Log(gameObject + "hdhdhdh");
+            //    PickAnimal();
+            //}
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -44,14 +56,7 @@ public class PickCorretManager : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyUp(KeyCode.R))
-        {
-            foreach (GameObject gameObject in animalsToRow)
-            {
-                Debug.Log(gameObject + "hdhdhdh");
-                PickAnimal();
-            }
-        }
+        
     }
 
     void PickAnimal()
