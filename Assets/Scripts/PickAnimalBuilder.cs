@@ -10,6 +10,7 @@ public class PickAnimalBuilder : MonoBehaviour
 
     //The animal the player needs to pick out
     [SerializeField]
+    private int chosenAnimalIndex;
     private GameObject chosenAnimal;
 
     //Another reference for the chosen one so I can check if the player clicks on the wrong one (The one that shows which one to find instead of the one "hidden" with other animals
@@ -17,6 +18,7 @@ public class PickAnimalBuilder : MonoBehaviour
     private GameObject chosenIcon;
 
     //Make a list to hold the random animals + the chosen one so we can spawn them later. Also so we can check the list if it already has an animal so we won't have duplicates.
+    [SerializeField]
     private List<GameObject> randomAnimals;
 
 
@@ -34,7 +36,11 @@ public class PickAnimalBuilder : MonoBehaviour
 
         }
 
-
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            ResetListDebug();
+            
+        }
     }
 
     //Function to do all the other functions
@@ -50,39 +56,44 @@ public class PickAnimalBuilder : MonoBehaviour
     //Pick a random animal from the animals array. (Maybe I could use local variables and out the animal but going to use a variable just in case.
     void PickRandomAnimal()
     {
-        chosenAnimal = animals[Random.Range(0, (animals.Length - 1))];
-        //Debug.Log(animals.Length); // Due to earlier problems, testing everything just in case (maybe a waste of time, but better safe than sorry for now)
-        //Debug.Log(animals.Length - 1);
+        //chosenAnimal = animals[Random.Range(0, (animals.Length - 1))];
+        chosenAnimalIndex = Random.Range(0, animals.Length - 1);
         Debug.Log(chosenAnimal);
     }
 
     //Spawn the randomed animal and disable its collider so it can't be clicked
     void SpawnChosenAnimal()
     {
-        chosenIcon = Instantiate(chosenAnimal, new Vector3(0, 8, 0), Quaternion.identity);
+        //chosenIcon = Instantiate(chosenAnimal, new Vector3(0, 8, 0), Quaternion.identity);
+        chosenIcon = Instantiate(animals[chosenAnimalIndex], new Vector3(0, 8, 0), Quaternion.identity);
         chosenIcon.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     void ListRandomAnimals()
     {
         //Add the chosen animal to the list
-        randomAnimals.Add(chosenAnimal);
+        //randomAnimals.Add(chosenAnimal);
 
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 9; i++)
         {
             int randomIndex = Random.Range(0, animals.Length);
 
             if (randomAnimals.Contains(animals[randomIndex]))
             {
-                return;
+                i--;
+                
             }
             else
             {
                 randomAnimals.Add(animals[randomIndex]);
             }
 
+            //Debug.Log(i);
+
               
         }
+
+        randomAnimals.Insert((Random.Range(0, randomAnimals.Count - 1)), chosenAnimal);
         
 
 
@@ -95,4 +106,12 @@ public class PickAnimalBuilder : MonoBehaviour
             Debug.Log(gameObject);
         }
     }
+
+    void ResetListDebug()
+    {
+        randomAnimals.Clear();
+        ListRandomAnimals();
+    }
+
+
 }
